@@ -1,0 +1,23 @@
+#menu
+{
+	margin: 0px 10px 5px 0px;
+	padding: 0 0 20px 10px;
+}
+
+#menu li
+{
+	margin: 0;
+	font-size: 18px;
+	float: right;
+	display: inline;
+	list-style-type: none;
+	padding: 0 12px 10px 12px;
+	text-decoration: none;
+	color: #FFF;
+}
+
+#menu a:hover
+{
+	color: #FF80A8;
+	background: url(../Images/1.png) no-repeat bottom center;
+}
