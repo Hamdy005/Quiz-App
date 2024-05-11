@@ -1,41 +1,54 @@
  class Quiz {
 
   #score = 0;
-  #prevQuestionNo = -1;
   #currQuestionNo = 0;
-  #currChoices = document.getElementsByClassName("choice");
-  #questions = [["Which of the following is not a programming language?", 3], 
-                ["Which object in OOP promotes code reusability?", 0],
-               [ "What is the file extenstion for c++ source code files?", 1]];
+  #currOptions = document.getElementsByClassName("choice");
+  #questions = [ 
 
-  #choices = [["C++", "HTML", "CSS", "Both B and C"],
-              ["Inheritance", "Encapsulation", "Polymorphism", "Abstraction"], 
-              [".c++", ".cpp", ".cpl", "none of the above"]];
+    {question: "What kind of language is Javascript?",
+    options: ["Object-oriented"," Object-based"," Procedural"," None of the above"],
+    answer: 1},
 
+    {question: "How do you define a variable in Javascript?",
+    options: [" var", " let", "Both", " None"],
+    answer: 2},
+
+    {question: "What methods can display data in Javascript?",
+    options: [" document.write()"," console.log()"," window.alert()"," All of the above"],
+    answer: 1}
+
+  ]
   
-  #nextBtn = document.getElementById("next-btn");
   #scoreLabel = document.getElementById("curr-score");
   #quizHdr = document.getElementById("right-cont-hdr");
   #questionPar = document.getElementById("question");
   
 
-  Quiz() {
+  constructor() {
 
-    if(this.#currQuestionNo != this.#prevQuestionNo) {
-
-      if(this.#currQuestionNo == 0)
-        this.displayAndChoose();
-      
-      this.#nextBtn.onclick = this.displayAndChoose.bind(this);
-
-    }
-      
-    else
-      alert("Please choose an answer");
+    this.guiDisplay();
   
   }
 
-  displayAndChoose() {   
+  showQuestion(q) {
+    // q parameter for making obkject
+    console.log(
+      "%c" + q.question,
+      "color: #4CAF50; font-size: 18px; font-weight: bold"
+    ); // Display the question
+    q.options.forEach(
+      (
+        option,
+        index // for each loop to iterate over every option
+      ) =>
+        console.log(
+          `  - %c${index + 1}. ${option}`,
+          "color: #2196F3; font-size: 16px;"
+        ) // beacuse the array start with index zero we +1 to index and show questions
+    );
+  }
+
+  guiDisplay() {   
 
     if(this.#currQuestionNo >= this.#questions.length) {
 
@@ -45,49 +58,49 @@
     }
 
     let ind = this.#currQuestionNo;
-    this.#prevQuestionNo = this.#currQuestionNo;
+    let currObject = this.#questions[ind];
   
     this.#quizHdr.innerHTML = `Question ${ind + 1}`;
-    this.#questionPar.innerHTML = this.#questions[ind][0];
+    this.#questionPar.innerHTML = currObject.question;
 
     for(let j = 0; j < 4; ++j) {
 
-      this.#currChoices[j].innerHTML = this.#choices[ind][j];
-      this.#currChoices[j].onclick = this.isCorrect.bind(this, ind, j);
-      this.#currChoices[j].style.border = "3px solid black";
+      this.#currOptions[j].innerHTML = currObject.options[j];
+      this.#currOptions[j].style.border = "3px solid black";
 
     }
 
-    if(this.#currQuestionNo == this.#questions.length)
-      this.#nextBtn.innerHTML = "Submit";
-
+    this.showQuestion(this.#questions[this.#currQuestionNo]);
+    setTimeout(() => {this.choose()}, 500);
   }
 
-  isCorrect(ind, choosenAnswer) {
+  choose() {
 
-    this.#currQuestionNo++;
+    let choosenAnswer = prompt("Choose the correct answer");
 
     let correct = false;
-    let correctAnswer = this.#questions[ind][1];
+    let correctAnswer = this.#questions[this.#currQuestionNo].answer;
 
-    if(choosenAnswer == correctAnswer) {
+    if(choosenAnswer == correctAnswer + 1) {
 
       correct = true;
-      document.getElementById(`choice${choosenAnswer + 1}`).style.border = "5px solid green";
+      document.getElementById(`choice${choosenAnswer}`).style.border = "5px solid green";
 
-    }        
-
+    } 
+    
     else {
 
-      document.getElementById(`choice${choosenAnswer + 1}`).style.border = "5px solid red";
+      document.getElementById(`choice${choosenAnswer}`).style.border = "5px solid red";
       document.getElementById(`choice${correctAnswer + 1}`).style.border = "5px solid green";
 
     }
+
     this.#score += correct;
-    this.#scoreLabel.innerHTML = `${this.#score} / ${this.#currQuestionNo}`;
+    this.#scoreLabel.innerHTML = `${this.#score} / ${++this.#currQuestionNo}`;
+    setTimeout(() => {this.guiDisplay()}, 500);
+    
   }
 
 };
 
-q = new Quiz();
-q.Quiz();
+new Quiz();
