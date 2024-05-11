@@ -1,4 +1,4 @@
- class Quiz {
+class Quiz {
 
   #score = 0;
   #currQuestionNo = 0;
@@ -52,7 +52,10 @@
 
     if(this.#currQuestionNo >= this.#questions.length) {
 
-      alert(`Your answers are submitted successfully \n score: ${this.#score} / ${this.#currQuestionNo}`);
+      let scoreLabel = `${this.#score} / ${this.#currQuestionNo}`;
+
+      alert(`Your answers are submitted successfully \n score: ${scoreLabel}`);
+      console.log(`%c Your final score is: ${scoreLabel}`, "color: #FF5722; font-size: 18px; font-weight: bold;")
       return;
 
     }
@@ -79,12 +82,13 @@
     let choosenAnswer = prompt("Choose the correct answer");
 
     let correct = false;
-    let correctAnswer = this.#questions[this.#currQuestionNo].answer;
+    let correctAnswer = this.#questions[this.#currQuestionNo++].answer;
 
     if(choosenAnswer == correctAnswer + 1) {
 
       correct = true;
       document.getElementById(`choice${choosenAnswer}`).style.border = "5px solid green";
+      console.log(`%c Correct`, "color: #4CAF50; font-size: 16px; font-weight: bold");
 
     } 
     
@@ -92,11 +96,17 @@
 
       document.getElementById(`choice${choosenAnswer}`).style.border = "5px solid red";
       document.getElementById(`choice${correctAnswer + 1}`).style.border = "5px solid green";
+      console.log(`%c Incorrect. The correct answer is: ${correctAnswer}`, "color: #F44336; font-size: 16px;");
 
     }
 
+    let scoreLabel = `${this.#score} / ${this.#currQuestionNo}`;
     this.#score += correct;
-    this.#scoreLabel.innerHTML = `${this.#score} / ${++this.#currQuestionNo}`;
+    this.#scoreLabel.innerHTML = scoreLabel
+
+    if(this.#currQuestionNo < this.#questions.length)
+      console.log(`%c Your current score is: ${scoreLabel}`, "color: #795548; font-size: 16px; font-weight: bold;");
+    
     setTimeout(() => {this.guiDisplay()}, 500);
     
   }
