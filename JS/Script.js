@@ -25,10 +25,30 @@
   
 
   constructor() {
-    this.display();
+
+    this.guiDisplay();
+  
   }
 
-  display() {   
+  showQuestion(q) {
+    // q parameter for making obkject
+    console.log(
+      "%c" + q.question,
+      "color: #4CAF50; font-size: 18px; font-weight: bold"
+    ); // Display the question
+    q.options.forEach(
+      (
+        option,
+        index // for each loop to iterate over every option
+      ) =>
+        console.log(
+          `  - %c${index + 1}. ${option}`,
+          "color: #2196F3; font-size: 16px;"
+        ) // beacuse the array start with index zero we +1 to index and show questions
+    );
+  }
+
+  guiDisplay() {   
 
     if(this.#currQuestionNo >= this.#questions.length) {
 
@@ -41,16 +61,16 @@
     let currObject = this.#questions[ind];
   
     this.#quizHdr.innerHTML = `Question ${ind + 1}`;
-    this.#questionPar.innerHTML = currObject.question; //GUI
-    console.log(`%c + ${currObject.question}`, "color: #4CAF50; font-size: 18px; font-weight: bold") // console
+    this.#questionPar.innerHTML = currObject.question;
 
     for(let j = 0; j < 4; ++j) {
 
       this.#currOptions[j].innerHTML = currObject.options[j];
       this.#currOptions[j].style.border = "3px solid black";
-      console.log(`%c ${j + 1}.${currObject.options[j]}`, "color: #2196F3; font-size: 16px;")
 
     }
+
+    this.showQuestion(this.#questions[this.#currQuestionNo]);
     setTimeout(() => {this.choose()}, 500);
   }
 
@@ -77,7 +97,7 @@
 
     this.#score += correct;
     this.#scoreLabel.innerHTML = `${this.#score} / ${++this.#currQuestionNo}`;
-    setTimeout(() => {this.display()}, 500);
+    setTimeout(() => {this.guiDisplay()}, 500);
     
   }
 
